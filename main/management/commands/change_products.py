@@ -7,9 +7,9 @@ import random
 class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
-        for obj in Product.objects.all():
-            with transaction.atomic():
-                obj.price = random.randrange(1, 10000000)/100
-                obj.status = random.choice(['in_stock', 'out_of_stock'])
-                obj.remains = random.randrange(1, 100000)
-                obj.save()
+        products = Product.objects.all()
+        for obj in products:
+            obj.price = random.randrange(1, 10000000)/100
+            obj.status = random.choice(['in_stock', 'out_of_stock'])
+            obj.remains = random.randrange(1, 100000)
+        Product.objects.bulk_update(products, ['price', 'status', 'remains'])
